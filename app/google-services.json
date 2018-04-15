@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "739624882414",
+    "firebase_url": "https://chris-oddsgame.firebaseio.com",
+    "project_id": "chris-oddsgame",
+    "storage_bucket": "chris-oddsgame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739624882414:android:df04c4269f5b1c63",
+        "android_client_info": {
+          "package_name": "biz.cstevens.oddsgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739624882414-fcnqb5n5ebindveenbtg4gussr81d2dl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biz.cstevens.oddsgame",
+            "certificate_hash": "bc97863460d1998c9cf3c596fb27f9428bdab66a"
+          }
+        },
+        {
+          "client_id": "739624882414-1e8t2noupa5ecmi9dr9e5v5nba6nt3vi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1H0eyPwXrQ1Sm9T9zozA_f5lfXRxcQQY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739624882414-1e8t2noupa5ecmi9dr9e5v5nba6nt3vi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

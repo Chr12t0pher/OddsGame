@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_new_game"
+            android:icon="@drawable/ic_add_box_black_24dp"
+            android:title="New Game" />
+        <item
+            android:id="@+id/menu_requests"
+            android:icon="@drawable/ic_move_to_inbox_black_24dp"
+            android:title="Requests" />
+        <item
+            android:id="@+id/menu_history"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="Past Games" />
+        <item
+            android:id="@+id/menu_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+        <item
+            android:id="@+id/menu_user_guide"
+            android:icon="@drawable/ic_live_help_black_24dp"
+            android:title="User Guide" />
+    </group>
+</menu>

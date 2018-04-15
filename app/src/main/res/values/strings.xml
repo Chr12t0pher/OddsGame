@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">OddsGame</string>
+
+    <string name="facebook_application_id" translatable="false">276450842836312</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb276450842836312</string>
+</resources>
