@@ -1,4 +1,4 @@
-package biz.cstevens.oddsgame;
+package biz.cstevens.oddsgame.Documents;
 
 public class OddsDocument {
     public String a_id;

@@ -13,14 +13,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.util.ExtraConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import biz.cstevens.oddsgame.Util.DownloadImageTask;
+
+
 public class Container extends AppCompatActivity {
     private DrawerLayout menuDrawer;
+    private ImageView userImage;
+    private TextView userName;
+    private TextView userEmail;
+
     private Toolbar toolbar;
     private NavigationView navView;
 
@@ -61,6 +71,27 @@ public class Container extends AppCompatActivity {
                     }
                 }
         );
+        View header = navView.getHeaderView(0);
+        userImage = header.findViewById(R.id.header_image);
+        userName = header.findViewById(R.id.header_name);
+        userEmail = header.findViewById(R.id.header_email);
+        new DownloadImageTask(userImage).execute(user.getPhotoUrl().toString());
+        userName.setText(user.getDisplayName());
+        userEmail.setText(user.getEmail());
+
+        Bundle extras = getIntent().getExtras();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if (extras != null && extras.get("type") != null && extras.get("type").equals("new_odds")) { // If there's data from FCM...
+            Fragment fragment = InGameFragment.newInstance(extras.get("oddsId").toString(), false);
+
+            // Switch over the fragments.
+            fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
+        } else {
+            navView.getMenu().getItem(0).setChecked(true);
+
+            fragmentManager.beginTransaction().replace(R.id.frag_content, NewGameFragment.newInstance()).commit();
+        }
     }
 
     public void selectDrawerItem(MenuItem item) {
@@ -73,13 +104,18 @@ public class Container extends AppCompatActivity {
                 fragmentClass = NewGameFragment.class;
                 break;
             case R.id.menu_requests:
-                // todo
+                fragmentClass = GameRequestFragment.class;
+                break;
             case R.id.menu_history:
-                // todo
-            case R.id.menu_settings:
-                // todo
+                fragmentClass = GameHistoryFragment.class;
+                break;
+            case R.id.menu_logout: // If logging out...
+                FirebaseAuth.getInstance().signOut(); // Sign out.
+                startActivity(SignIn.createIntent(this)); // Start the sign-in activity.
+                return;
             case R.id.menu_user_guide:
-                // todo
+                fragmentClass = UserGuideFragment.class;
+                break;
             default:
                 fragmentClass = NewGameFragment.class;
         }

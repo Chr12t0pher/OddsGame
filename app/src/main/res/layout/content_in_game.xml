@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Lock In"
+        android:text="@string/lock_in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Reverse"
+        android:text="@string/reverse"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,6 @@
         android:layout_height="26dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Odds of 42 to..."
         android:textAppearance="@android:style/TextAppearance.Material.Large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +49,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Buy all his drinks for the next fortnight"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/odds_title" />
 
@@ -80,7 +78,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Josh Oakley"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toEndOf="@+id/user_a_img"
             app:layout_constraintTop_toTopOf="parent" />
@@ -91,7 +88,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:text="Locked in!"
             android:textAppearance="@android:style/TextAppearance.Material.Small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/user_a_img"
@@ -117,7 +113,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:text="22"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -153,7 +148,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Josh Oakley"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toEndOf="@+id/user_b_img"
             app:layout_constraintTop_toTopOf="parent" />
@@ -164,7 +158,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:text="Locked in!"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/user_b_img"
             app:layout_constraintTop_toBottomOf="@+id/user_b_name" />
@@ -188,7 +181,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:text="33"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -10,6 +10,8 @@ import com.firebase.ui.auth.IdpResponse;
 
 import java.util.*;
 
+import biz.cstevens.oddsgame.Util.FirebaseInstanceIDService;
+
 public class SignIn extends AppCompatActivity{
     private static final int RC_SIGN_IN = 123;
 
@@ -44,6 +46,7 @@ public class SignIn extends AppCompatActivity{
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
         if (resultCode == RESULT_OK) {
+            FirebaseInstanceIDService.setToken();
             startActivity(Container.createIntent(this, response));
         }
     }

@@ -13,15 +13,42 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-        <activity android:name=".Container" android:theme="@style/AppTheme">
+        <activity
+            android:name=".Container"
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="FCM_START_ODDS" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity android:name=".SignIn" />
+
+        <service android:name=".Util.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Util.FirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        
+        <provider
+            android:authorities="biz.cstevens.oddsgame.gamehistorydb.gamehistoryprovider"
+            android:name=".GameHistoryDb.GameHistoryProvider"
+            android:exported="false" />
+
     </application>
 
 </manifest>
