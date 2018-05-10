@@ -1,5 +1,6 @@
 package biz.cstevens.oddsgame;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Locale;
 
 import biz.cstevens.oddsgame.Documents.OddsDocument;
 import biz.cstevens.oddsgame.Util.UserListAdapter;
@@ -44,7 +47,7 @@ public class NewGameFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -75,7 +78,7 @@ public class NewGameFragment extends Fragment {
         oddsSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                oddsNo.setText(Integer.toString(progress + 2));
+                oddsNo.setText(String.format(Locale.getDefault(), "%1$d", progress+2));
             }
 
             @Override
@@ -107,6 +110,7 @@ public class NewGameFragment extends Fragment {
         DocumentSnapshot opponent = recAdapter.getUser();
         if (opponent == null) {
             Toast.makeText(getContext(), getString(R.string.please_select_an_opponent), Toast.LENGTH_SHORT).show();
+            oddsSend.setEnabled(true);
             return;
         }
         OddsDocument odds = new OddsDocument(

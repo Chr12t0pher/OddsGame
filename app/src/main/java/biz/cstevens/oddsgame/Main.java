@@ -9,20 +9,20 @@ import com.google.firebase.FirebaseApp;
 
 public class Main extends Application {
 
+    public static final int NEW_GAME_FRAGMENT = 1;
+    public static final int IN_GAME_FRAGMENT = 2;
+    public static final int GAME_REQUEST_FRAGMENT = 3;
+    public static final int GAME_HISTORY_FRAGMENT = 4;
+    public static final int USER_GUIDE_FRAGMENT = 5;
+
+
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         // Setup Firebase.
         FirebaseApp.initializeApp(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // if Android 8.0+ register the notification channel
-            CharSequence name = "New odds games";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("odds_notification", name, importance);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
 
     }
 }

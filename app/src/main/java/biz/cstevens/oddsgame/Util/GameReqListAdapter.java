@@ -1,6 +1,7 @@
 package biz.cstevens.oddsgame.Util;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
+
 import biz.cstevens.oddsgame.Documents.OddsDocument;
 import biz.cstevens.oddsgame.InGameFragment;
 import biz.cstevens.oddsgame.R;
@@ -35,19 +38,19 @@ public class GameReqListAdapter extends RecyclerView.Adapter<GameReqListAdapter.
     }
 
     @Override
-    public GameReqViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GameReqViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View v = LayoutInflater.from(context).inflate(R.layout.oddsreq_list_item, parent, false);
         return new GameReqViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(final GameReqViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GameReqViewHolder holder, int position) {
         final OddsDocument game = games.get(position).toObject(OddsDocument.class);
 
         holder.constraintLayout.setSelected(position == selectedPos);
         holder.name.setText(game.a_id.equals(FirebaseAuth.getInstance().getUid()) ? game.b_name : game.a_name);
-        holder.oddsMsg.setText("Odds of " + Integer.toString(game.odds) + " to " + game.message);
+        holder.oddsMsg.setText(context.getString(R.string.odds_of_to_msg, game.odds, game.message));
         FirebaseFirestore.getInstance().collection("users")
                 .document(game.a_id.equals(FirebaseAuth.getInstance().getUid()) ? game.b_id : game.a_id)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -104,7 +107,7 @@ public class GameReqListAdapter extends RecyclerView.Adapter<GameReqListAdapter.
                     );
 
                     // Switch over the fragments.
-                    fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
+                    fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).addToBackStack("").commit();
                 }
             });
         }

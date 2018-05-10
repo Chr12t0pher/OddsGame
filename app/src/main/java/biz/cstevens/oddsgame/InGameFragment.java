@@ -1,7 +1,8 @@
 package biz.cstevens.oddsgame;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -25,9 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.Locale;
+
 import biz.cstevens.oddsgame.Documents.OddsDocument;
 import biz.cstevens.oddsgame.GameHistoryDb.GameHistoryDb;
-import biz.cstevens.oddsgame.GameHistoryDb.GameHistoryProvider;
 
 public class InGameFragment extends Fragment {
     private FirebaseFirestore db;
@@ -61,7 +62,7 @@ public class InGameFragment extends Fragment {
         InGameFragment inGameFragment = new InGameFragment();
 
         Bundle args = new Bundle();
-        args.putString("oddsID", oddsID);
+        args.putString("oddsId", oddsID);
         args.putBoolean("isCreator", isCreator);
         inGameFragment.setArguments(args);
 
@@ -71,14 +72,16 @@ public class InGameFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.content_in_game, container, false);
+
+        int layout = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? R.layout.content_in_game : R.layout.content_in_game_landscape;
+        View view = inflater.inflate(layout, container, false);
 
         db = FirebaseFirestore.getInstance();
         gameHistoryDb = new GameHistoryDb(getContext());
 
-        odds_ref = db.collection("odds").document(getArguments().getString("oddsID"));
+        odds_ref = db.collection("odds").document(getArguments().getString("oddsId"));
         isCreator = getArguments().getBoolean("isCreator");
         isReversed = false;
 
@@ -115,7 +118,7 @@ public class InGameFragment extends Fragment {
                 OddsDocument odds = snapshot.toObject(OddsDocument.class);
                 if (odds.reversed && !isReversed) {
                     isReversed = true;
-                    reverseReset(false);
+                    reverseReset();
                 }
                 handleData(odds);
             }
@@ -134,8 +137,13 @@ public class InGameFragment extends Fragment {
         reverse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                odds_ref.update("reversed", true);
-                reverseReset(true);
+                reverseReset();
+                odds_ref.update(
+                        "a_odds", -1,
+                        "b_odds", -1,
+                        "reversed", true
+                );
+                reverse.setEnabled(false);
             }
         });
 
@@ -171,7 +179,6 @@ public class InGameFragment extends Fragment {
                 (odds.b_odds > 0 ? R.color.green : R.color.red)
         ));
 
-        odds_picker.setValue((isCreator ? odds.a_odds : odds.b_odds));
         odds_picker.setEnabled((isCreator ? odds.a_odds < 0 : odds.b_odds < 0));
         odds_picker.setMinValue(1);
         odds_picker.setMaxValue(odds.odds);
@@ -212,20 +219,11 @@ public class InGameFragment extends Fragment {
                             (odds.reversed) ? R.color.green : R.color.red
                     ));
 
-                    ContentValues values = new ContentValues();
-                    values.put("uid", getArguments().getString("oddsID"));
-                    values.put("opponent", (isCreator ? odds.b_name : odds.a_name));
-                    values.put("message", odds.message);
-                    values.put("odds", odds.odds);
-                    values.put("won", isCreator);
-                    values.put("list_text",
-                            (isCreator ? "Won" : "Lost") + " odds of " + odds.odds + " to " + odds.message + "."
-                    );
-                    gameHistoryDb.addGame(values);
+                    addHistory(odds, (isReversed == isCreator));
                 }
 
-                user_a_odds.setText(Integer.toString(odds.a_odds));
-                user_b_odds.setText(Integer.toString(odds.b_odds));
+                user_a_odds.setText(String.format(Locale.getDefault(), "%1$d", odds.a_odds));
+                user_b_odds.setText(String.format(Locale.getDefault(), "%1$d", odds.b_odds));
 
                 if (!odds.reversed && odds.a_odds != odds.b_odds) // If there isn't a match, and hasn't been reversed yet...
                     reverse.startAnimation(fadeIn);
@@ -269,7 +267,7 @@ public class InGameFragment extends Fragment {
         });
     }
 
-    private void reverseReset(final Boolean initiated) {
+    private void reverseReset() {
         final Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         final Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
 
@@ -293,27 +291,10 @@ public class InGameFragment extends Fragment {
                 user_a_odds.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
                 user_b_odds.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
 
-                if (!initiated) {
-                    odds_ref.update(
-                            "a_odds", -1,
-                            "b_odds", -1,
-                            "reversed", true
-                    ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            odds_picker.startAnimation(fadeIn);
-                            odds_lock.startAnimation(fadeIn);
-                            user_a_check.startAnimation(fadeIn);
-                            user_b_check.startAnimation(fadeIn);
-                        }
-                    });
-                } else {
-                    odds_picker.startAnimation(fadeIn);
-                    odds_lock.startAnimation(fadeIn);
-                    user_a_check.startAnimation(fadeIn);
-                    user_b_check.startAnimation(fadeIn);
-                }
-
+                odds_picker.startAnimation(fadeIn);
+                odds_lock.startAnimation(fadeIn);
+                user_a_check.startAnimation(fadeIn);
+                user_b_check.startAnimation(fadeIn);
             }
 
             @Override
@@ -344,5 +325,18 @@ public class InGameFragment extends Fragment {
 
             }
         });
+    }
+
+    private void addHistory(final OddsDocument odds, boolean won) {
+        ContentValues values = new ContentValues();
+        values.put("uid", getArguments().getString("oddsID"));
+        values.put("opponent", (isCreator ? odds.b_name : odds.a_name));
+        values.put("message", odds.message);
+        values.put("odds", odds.odds);
+        values.put("won", won);
+        values.put("list_text",
+                (won ? "Won" : "Lost") + " odds of " + odds.odds + " to " + odds.message + "."
+        );
+        gameHistoryDb.addGame(values);
     }
 }

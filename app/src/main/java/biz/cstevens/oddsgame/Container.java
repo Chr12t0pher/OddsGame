@@ -43,6 +43,8 @@ public class Container extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState == null) savedInstanceState = new Bundle();
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) { // If there's no logged in user, show the login screen and don't continue loading.
             startActivity(SignIn.createIntent(this));
@@ -82,16 +84,61 @@ public class Container extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if (extras != null && extras.get("type") != null && extras.get("type").equals("new_odds")) { // If there's data from FCM...
-            Fragment fragment = InGameFragment.newInstance(extras.get("oddsId").toString(), false);
+        if (extras != null && extras.get("type") != null && extras.getString("type").equals("new_odds")) { // If there's data from FCM...
+            Fragment fragment = InGameFragment.newInstance(extras.getString("oddsId"), false);
+
+            savedInstanceState.putInt("fragment", Main.IN_GAME_FRAGMENT);
+            savedInstanceState.putString("oddsId", extras.getString("oddsId"));
+            savedInstanceState.putBoolean("isCreator", false);
 
             // Switch over the fragments.
-            fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).addToBackStack("").commit();
+
+        } else if (savedInstanceState.get("fragment") != null) {
+            savedInstanceState.putInt("fragment", Main.NEW_GAME_FRAGMENT);
+            resumeFragment(savedInstanceState.getInt("fragment"), savedInstanceState);
+
         } else {
             navView.getMenu().getItem(0).setChecked(true);
-
             fragmentManager.beginTransaction().replace(R.id.frag_content, NewGameFragment.newInstance()).commit();
+
         }
+    }
+
+    private void resumeFragment(int fragmentId, Bundle savedInstanceState) {
+        Fragment fragment = null;
+        switch (fragmentId) {
+            case Main.NEW_GAME_FRAGMENT:
+                navView.getMenu().getItem(0).setChecked(true);
+                fragment = NewGameFragment.newInstance();
+                break;
+
+            case Main.IN_GAME_FRAGMENT:
+                fragment = InGameFragment.newInstance(
+                        savedInstanceState.getString("oddsId"),
+                        savedInstanceState.getBoolean("isCreator")
+                );
+                break;
+
+            case Main.GAME_REQUEST_FRAGMENT:
+                navView.getMenu().getItem(1).setChecked(true);
+                fragment = GameRequestFragment.newInstance();
+                break;
+
+            case Main.GAME_HISTORY_FRAGMENT:
+                navView.getMenu().getItem(2).setChecked(true);
+                fragment = GameHistoryFragment.newInstance();
+                break;
+
+            case Main.USER_GUIDE_FRAGMENT:
+                navView.getMenu().getItem(4).setChecked(true);
+                fragment = UserGuideFragment.newInstance();
+                break;
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
+
     }
 
     public void selectDrawerItem(MenuItem item) {
