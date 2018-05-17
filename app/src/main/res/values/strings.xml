@@ -22,4 +22,5 @@
     <string name="no_winner">No winner</string>
     <string name="please_select_an_opponent">Please select an opponent</string>
     <string name="odds_of_to_msg">Odds of %1$d to %2$s</string>
+    <string name="please_provide_a_message">Please provide a message</string>
 </resources>

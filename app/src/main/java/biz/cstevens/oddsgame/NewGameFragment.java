@@ -113,6 +113,11 @@ public class NewGameFragment extends Fragment {
             oddsSend.setEnabled(true);
             return;
         }
+        if (message.getText().length() == 0) {
+            Toast.makeText(getContext(), getString(R.string.please_provide_a_message), Toast.LENGTH_SHORT).show();
+            oddsSend.setEnabled(true);
+            return;
+        }
         OddsDocument odds = new OddsDocument(
                 user.getUid(), user.getDisplayName(), opponent.getId(), opponent.get("name").toString(), message.getText().toString(), oddsSlider.getProgress()+2
         );
