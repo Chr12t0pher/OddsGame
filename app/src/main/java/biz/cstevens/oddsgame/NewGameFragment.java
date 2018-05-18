@@ -1,5 +1,6 @@
 package biz.cstevens.oddsgame;
 
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,7 +54,8 @@ public class NewGameFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        View view = inflater.inflate(R.layout.content_new_game, container, false);
+        int layout = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) ? R.layout.content_new_game : R.layout.content_new_game_landscape;
+        View view = inflater.inflate(layout, container, false);
 
         oddsNo = view.findViewById(R.id.odds_no);
         oddsSlider = view.findViewById(R.id.odds_slider);
