@@ -21,6 +21,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage message) {
         Log.d("", message.toString());
 
+        // build the Intent to be fired when the user clicks the notification
         Intent intent = new Intent(this, Container.class);
         intent
                 .putExtra("type", message.getData().get("type"))
@@ -33,12 +34,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentTitle(message.getData().get("title"))
                 .setContentText(message.getData().get("body"))
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent)
+                .setPriority(Notification.PRIORITY_HIGH) // PRIORITY_HIGH = notification pops up
+                .setContentIntent(pendingIntent) // attach Intent to be fired when notification is clicked
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // if Android 8.0+ register the notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // if Android 8.0+ register the notification channel before notifying
             CharSequence name = "New odds games";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("odds_notification", name, importance);

@@ -17,10 +17,10 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     public static void setToken() {
-        String token = FirebaseInstanceId.getInstance().getToken();
+        String token = FirebaseInstanceId.getInstance().getToken(); // get the devices unique fcmToken
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null && token != null) {
+        if (user != null && token != null) { // if the token and the authenticated user are defined, update/create the users' document
             db.collection("users").document(user.getUid()).set(new UserDocument(user.getDisplayName(), user.getPhotoUrl().toString(), token), SetOptions.merge());
         }
     }

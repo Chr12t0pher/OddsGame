@@ -48,10 +48,11 @@ public class GameReqListAdapter extends RecyclerView.Adapter<GameReqListAdapter.
     public void onBindViewHolder(@NonNull final GameReqViewHolder holder, int position) {
         final OddsDocument game = games.get(position).toObject(OddsDocument.class);
 
+        // build each list item
         holder.constraintLayout.setSelected(position == selectedPos);
         holder.name.setText(game.a_id.equals(FirebaseAuth.getInstance().getUid()) ? game.b_name : game.a_name);
         holder.oddsMsg.setText(context.getString(R.string.odds_of_to_msg, game.odds, game.message));
-        FirebaseFirestore.getInstance().collection("users")
+        FirebaseFirestore.getInstance().collection("users") // get the opponents' image
                 .document(game.a_id.equals(FirebaseAuth.getInstance().getUid()) ? game.b_id : game.a_id)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -97,11 +98,11 @@ public class GameReqListAdapter extends RecyclerView.Adapter<GameReqListAdapter.
             this.oddsMsg = itemView.findViewById(R.id.request_odds_msg);
             constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v) { // if the list item is clicked...
                     selectedPos = getAdapterPosition();
 
                     FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                    Fragment fragment = InGameFragment.newInstance(
+                    Fragment fragment = InGameFragment.newInstance( // Create a new InGameFragment with the relevant oddsId and creator
                             games.get(selectedPos).getId(),
                             games.get(selectedPos).get("a_id").equals(FirebaseAuth.getInstance().getUid())
                     );

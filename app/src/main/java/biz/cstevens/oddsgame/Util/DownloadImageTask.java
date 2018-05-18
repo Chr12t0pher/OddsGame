@@ -20,8 +20,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         String url = urls[0];
         Bitmap out = null;
         try {
-            InputStream inputStream = new URL(url).openStream();
-            out = BitmapFactory.decodeStream(inputStream);
+            InputStream inputStream = new URL(url).openStream(); // download image
+            out = BitmapFactory.decodeStream(inputStream); // create bitmap from raw data
         } catch (Exception e) {
             Log.e("ImageDownload", e.getMessage());
         }

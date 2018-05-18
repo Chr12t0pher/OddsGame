@@ -77,7 +77,7 @@ public class Container extends AppCompatActivity {
         userImage = header.findViewById(R.id.header_image);
         userName = header.findViewById(R.id.header_name);
         userEmail = header.findViewById(R.id.header_email);
-        new DownloadImageTask(userImage).execute(user.getPhotoUrl().toString());
+        new DownloadImageTask(userImage).execute(user.getPhotoUrl().toString()); // download the users profile image
         userName.setText(user.getDisplayName());
         userEmail.setText(user.getEmail());
 
@@ -85,21 +85,23 @@ public class Container extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (extras != null && extras.get("type") != null && extras.getString("type").equals("new_odds")) { // If there's data from FCM...
-            Fragment fragment = InGameFragment.newInstance(extras.getString("oddsId"), false);
+            Fragment fragment = InGameFragment.newInstance(extras.getString("oddsId"), false); // Create new instance of InGameFragment
 
-            savedInstanceState.putInt("fragment", Main.IN_GAME_FRAGMENT);
+            savedInstanceState.putInt("fragment", Main.IN_GAME_FRAGMENT); //
             savedInstanceState.putString("oddsId", extras.getString("oddsId"));
             savedInstanceState.putBoolean("isCreator", false);
+            
+            setTitle("OddsGame");
 
-            // Switch over the fragments.
+            // set the fragment view to the relevant fragment
             fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).addToBackStack("").commit();
 
-        } else if (savedInstanceState.get("fragment") != null) {
-            savedInstanceState.putInt("fragment", Main.NEW_GAME_FRAGMENT);
+        } else if (savedInstanceState.get("fragment") != null) { // If there's a specific fragment in the state bundle...
             resumeFragment(savedInstanceState.getInt("fragment"), savedInstanceState);
 
         } else {
             navView.getMenu().getItem(0).setChecked(true);
+            // set the fragment view to the relevant fragment
             fragmentManager.beginTransaction().replace(R.id.frag_content, NewGameFragment.newInstance()).commit();
 
         }
@@ -137,7 +139,7 @@ public class Container extends AppCompatActivity {
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit(); // set the fragment view to the relevant fragment
 
     }
 
@@ -173,7 +175,7 @@ public class Container extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Switch over the fragments.
+        // set the fragment view to the relevant fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frag_content, fragment).commit();
 

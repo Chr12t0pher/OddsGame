@@ -104,6 +104,7 @@ public class InGameFragment extends Fragment {
         user_b_odds = view.findViewById(R.id.user_b_odds);
 
 
+        // register listener for changes on the odds document
         odds_listener = odds_ref.addSnapshotListener(new EventListener<DocumentSnapshot>() { // Register realtime monitoring.
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -116,7 +117,7 @@ public class InGameFragment extends Fragment {
                     return;
                 }
                 OddsDocument odds = snapshot.toObject(OddsDocument.class);
-                if (odds.reversed && !isReversed) {
+                if (odds.reversed && !isReversed) { // if it's just been reversed...
                     isReversed = true;
                     reverseReset();
                 }
@@ -124,21 +125,23 @@ public class InGameFragment extends Fragment {
             }
         });
 
+        // register listener for clicks on the 'Lock In' button
         odds_lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                odds_ref.update((isCreator ? "a_odds" : "b_odds"), odds_picker.getValue());
+                odds_ref.update((isCreator ? "a_odds" : "b_odds"), odds_picker.getValue()); // set the users choice in the odds document
 
                 odds_lock.setEnabled(false);
                 odds_picker.setEnabled(false);
             }
         });
 
+        // register listener for clicks on the 'Reverse' button
         reverse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 reverseReset();
-                odds_ref.update(
+                odds_ref.update( // reset the data in the odds document
                         "a_odds", -1,
                         "b_odds", -1,
                         "reversed", true
@@ -327,7 +330,7 @@ public class InGameFragment extends Fragment {
         });
     }
 
-    private void addHistory(final OddsDocument odds, boolean won) {
+    private void addHistory(final OddsDocument odds, boolean won) { // add items to the SQLite database
         ContentValues values = new ContentValues();
         values.put("uid", getArguments().getString("oddsID"));
         values.put("opponent", (isCreator ? odds.b_name : odds.a_name));

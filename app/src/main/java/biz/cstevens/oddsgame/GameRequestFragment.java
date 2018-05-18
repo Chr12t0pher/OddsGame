@@ -43,7 +43,7 @@ public class GameRequestFragment extends Fragment {
         LinearLayoutManager recLayoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(recLayoutManager);
         final GameReqListAdapter recAdapter = new GameReqListAdapter();
-        recyclerView.setAdapter(recAdapter);
+        recyclerView.setAdapter(recAdapter); // attach adapter
 
 
         // Firestore doesn't support OR queries, so we have to nest a query to get a_id and b_id, then merge them.

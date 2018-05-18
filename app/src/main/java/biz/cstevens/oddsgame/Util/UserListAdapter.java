@@ -36,9 +36,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
     public void onBindViewHolder(final UserViewHolder holder, int position) {
         final UserDocument user = users.get(position).toObject(UserDocument.class);
 
+        // build each list item
         holder.relativeLayout.setSelected(position == selectedPos);
         holder.name.setText(user.name);
-        new DownloadImageTask(holder.avatar).execute(user.imgUri);
+        new DownloadImageTask(holder.avatar).execute(user.imgUri); // get the opponents' image
     }
 
 
@@ -78,9 +79,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
             this.name = itemView.findViewById(R.id.user_name);
             relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    selectedPos = getAdapterPosition();
-                    notifyDataSetChanged();
+                public void onClick(View v) { // if the list item is clicked...
+                    selectedPos = getAdapterPosition(); // update the currently selected index
+                    notifyDataSetChanged(); // regenerate the list, highlighting the selected item
                 }
             });
         }

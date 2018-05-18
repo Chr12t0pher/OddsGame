@@ -47,7 +47,7 @@ public class GameHistoryDb extends SQLiteOpenHelper {
 
     public void addGame(ContentValues values) {
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE + " WHERE uid = '" + values.get("uid") + "';", null);
-        if (cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) { // check the game has not already been added
             cursor.close();
             return;
         }

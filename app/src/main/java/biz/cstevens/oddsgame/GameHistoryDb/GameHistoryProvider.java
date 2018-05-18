@@ -35,8 +35,8 @@ public class GameHistoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        if (uriMatcher.match(uri) == GAME_HISTORY) {
-            gameDatabase.addGame(values);
+        if (uriMatcher.match(uri) == GAME_HISTORY) { // if the URI is valid...
+            gameDatabase.addGame(values); // add the game to the database
             return uri;
         } else {
             return null;
@@ -45,18 +45,18 @@ public class GameHistoryProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        return 0; // required function, deletes not required
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        return 0; // required function, updates not required
     }
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (uriMatcher.match(uri) == GAME_HISTORY) {
-            return gameDatabase.getAll();
+        if (uriMatcher.match(uri) == GAME_HISTORY) { // if the URI is valid...
+            return gameDatabase.getAll(); // get all the games from the database (we never need to do specific queries)
         } else {
             return null;
         }

@@ -29,8 +29,8 @@ public class SignIn extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         startActivityForResult(
                 AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
+                        .createSignInIntentBuilder() // use the AuthUI prefab login UI
+                        .setAvailableProviders(providers) // we only use Google and Facebook
                         .build(),
                 RC_SIGN_IN
         );
@@ -45,9 +45,9 @@ public class SignIn extends AppCompatActivity{
     protected void handleSignInResponse(int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
-        if (resultCode == RESULT_OK) {
-            FirebaseInstanceIDService.setToken();
-            startActivity(Container.createIntent(this, response));
+        if (resultCode == RESULT_OK) { // if the user has authenticated successfully...
+            FirebaseInstanceIDService.setToken(); // run the setToken function to add/update the user to the database
+            startActivity(Container.createIntent(this, response)); // go back to the Container activity
         }
     }
 }

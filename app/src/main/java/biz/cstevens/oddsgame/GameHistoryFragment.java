@@ -34,6 +34,7 @@ public class GameHistoryFragment extends ListFragment implements LoaderManager.L
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.content_game_history, container, false);
 
+        // adapter for mapping items from content provider to the list items
         gameHistoryAdapter = new SimpleCursorAdapter(
                 getActivity().getBaseContext(),
                 R.layout.oddshistory_list_item,
@@ -70,15 +71,15 @@ public class GameHistoryFragment extends ListFragment implements LoaderManager.L
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        Cursor game = (Cursor)gameHistoryAdapter.getItem(position);
+        Cursor game = (Cursor)gameHistoryAdapter.getItem(position); // game data row
 
-
+        // build sharing text
         String shareText = "I " + (game.getInt(4) > 0 ? "won" : "lost") + " against "
                             + game.getString(1) + " with odds of " + game.getInt(3)
                             + " to " + game.getString(2) + ".";
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-        startActivity(Intent.createChooser(shareIntent, "Share odds result"));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText); // set intent data
+        startActivity(Intent.createChooser(shareIntent, "Share odds result")); // open share chooser
     }
 }
